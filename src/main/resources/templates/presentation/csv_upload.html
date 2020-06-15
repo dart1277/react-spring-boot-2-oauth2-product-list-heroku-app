@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Upload CSV</title>
+    <th:block th:include="fragments/main_fragment.html :: headerincludes">
+    </th:block>
+</head>
+
+<body>
+<th:block th:include="fragments/main_fragment.html :: navbar(active_page='csv_upload')"></th:block>
+
+<div class="jumbotron center-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3 class="text-center">Please select csv file to upload</h3>
+                <form th:action="@{/admin/csv/users}" th:method="POST" enctype="multipart/form-data">
+                    <label class="btn btn-default btn-file btn-block" for="csvfile">
+                        Upload file <input id="csvfile" type="file" name="file" accept="text/csv"
+                                           style="display: none;"/>
+                    </label>
+                    <div th:if="${fileValidationError} != null">
+                    </div>
+                    <span th:text="${fileValidationError}" style="color:red"></span>
+
+                    <br/>
+                    <input class="btn btn-success btn-block" type="submit" value="Submit"/><br/>
+
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="text-center">
+                    Please select the file and submit
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="fragments/main_fragment.html :: footer"></div>
+</body>
+</html>

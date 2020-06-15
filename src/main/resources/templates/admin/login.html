@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Users csv app</title>
+    <th:block th:include="fragments/main_fragment.html :: headerincludes">
+    </th:block>
+</head>
+
+<body>
+
+<div class="container" style="width: 30%; margin: 0 auto;">
+    <form name="f" th:action="@{/admin/loginproc}" method="post">
+        <fieldset>
+            <legend>Please Login</legend>
+            <div style="text-align: center; color: red; font-weight: bold;">
+                <div th:if="${param.error}" class="alert alert-error">
+                    Invalid username or password.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    You have been logged out.
+                </div>
+            </div>
+            <div style="margin: 0 auto; width: 95%;">
+                <div style="margin: 0 auto; width: 60%;">
+                    <label for="username">Username</label>
+                    <input style="margin-left: 2em; margin: 0.5em 1em;" type="text" id="username" name="username"/>
+                </div>
+                <div style="margin: 0 auto; width: 60%;">
+                    <label for="password">Password</label>
+                    <input style="margin-left: 2em; margin: 0.5em 1em;" type="password" id="password" name="password"/>
+                </div>
+                <div class="form-actions" style="margin: 0 auto; width: 100%;">
+                    <button type="submit" class="btn"
+                            style="width: 100%; background-color: lightgreen; font-weight:bold;">Log in
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div th:replace="fragments/main_fragment.html :: footer"></div>
+</body>
+</html>

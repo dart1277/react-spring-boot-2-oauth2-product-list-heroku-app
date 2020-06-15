@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Upload CSV</title>
+    <th:block th:include="fragments/main_fragment.html :: headerincludes">
+    </th:block>
+</head>
+
+<body>
+<th:block th:include="fragments/main_fragment.html :: navbar(active_page='csv_search')"></th:block>
+
+<div class="jumbotron center-block">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="input-group">
+                    <input id="search_box" type="text" class="form-control"
+                           placeholder="Search users by name... (0 or min 3 chars)" title="0 or min 3 chars allowed">
+                    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="getUsers('search')">Go!</button>
+                    </span>
+                </div><!-- /input-group -->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <div id="delete_button" class="btn btn-danger" onclick="getChecked()" disabled="true">Delete all checked
+                    users
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="oldest_button" class="btn btn-default" onclick="getUsers('oldest')"
+                     title="Option without pagination">Show oldest user(s)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="cnt_button" class="btn btn-default" onclick="getUserCount()">Get user
+                    count pop-up
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div style="margin-top: 4px">
+                    Page size: <input id="page_size" type="number" name="pagination" min="1" max="100" value="5"
+                                      title="Page size"/>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div style="margin-top: 4px">
+                    Page no: <input id="page_number" type="number" name="pagination" min="0" max="100000" value="0"
+                                    title="Page number"/>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <ul id="found_list" class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/main_fragment.html :: footer"></div>
+<script>
+
+    function appendHeaderRow() {
+        var headerRow = '<li class="list-group-item"><div class="row">\n' +
+            '<div class="col-md-2"> Last name: </div>' +
+            '<div class="col-md-2"> First name: </div>' +
+            '<div class="col-md-2"> Birth date: </div>' +
+            '<div class="col-md-2"> Phone number: </div>' +
+            '<div class="col-md-2"> Select </div>' +
+            '</div></li>';
+
+        $('#found_list').append(headerRow);
+    }
+
+    function appendResults(users) {
+        $('#found_list').empty();
+
+        appendHeaderRow();
+
+        users.forEach(function (user) {
+            var row = '<li class="list-group-item">' +
+                '<div class="row">\n' +
+                ' <div class="col-md-2">' +
+                user["lastName"] +
+                ' </div>' +
+                ' <div class="col-md-2">' +
+                user["firstName"] +
+                ' </div>' +
+                ' <div class="col-md-2">' +
+                (user["birthDate"] != null ? user["birthDate"].join('-') : '') +
+                ' </div>' +
+                ' <div class="col-md-2">' +
+                (user["phoneNumber"] != null ? user["phoneNumber"] : '') +
+                ' </div>' +
+                ' <div class="col-md-2">' +
+                ' <input type="checkbox" id="cb_' + user["id"] + '" onclick="refreshDeleteButton()"/>' +
+                ' </div>' +
+                '</div>' +
+                '</li>';
+            $('#found_list').append(row);
+        });
+    }
+
+    function getChecked() {
+        if (!$('#delete_button').is("disabled")) {
+            $('#found_list input:checkbox:checked').each(function () {
+                var rowCbId = $(this).attr("id");
+                var thisCb = this;
+
+                $.ajax({
+                    url: '/admin/users/' + rowCbId.substr(3),
+                    type: 'DELETE',
+                    success: function (result) {
+                        $(thisCb).closest('li').remove();
+                        refreshDeleteButton();
+                    }
+                });
+            });
+        }
+    }
+
+    function refreshDeleteButton() {
+        var isDisabled = true;
+        if ($('#found_list input:checkbox:checked').size() > 0) {
+            isDisabled = false;
+        }
+        $('#delete_button').attr("disabled", isDisabled);
+    }
+
+    function getPageField(selector, defaultPageSize, minSize, maxSize) {
+        var pageSize = parseInt($(selector).val());
+        if (isNaN(pageSize) || pageSize < minSize || pageSize > maxSize) {
+            pageSize = defaultPageSize;
+            $(selector).val(defaultPageSize);
+        }
+        return pageSize;
+    }
+
+
+    function getPaginationQueryString(pageSize, pageNumber) {
+        return '?pageSize=' + pageSize + '&page=' + pageNumber;
+    }
+
+    function getUsers(mode) {
+        var pageSize = getPageField('#page_size', 5, 1, 100);
+        var pageNumber = getPageField('#page_number', 0, 0, 100000);
+        var paginationQueryString = getPaginationQueryString(pageSize, pageNumber);
+        var queryString = '/admin/users/all' + paginationQueryString;
+
+        var searchText = $('#search_box').val();
+        if (searchText && mode === 'search') {
+            if (searchText.length >= 3) {
+                queryString = '/admin/users/byname/' + $('#search_box').val() + paginationQueryString;
+            } else {
+                alert("Search text must have at least 3 characters or be empty");
+                return;
+            }
+        } else if (mode === 'oldest') {
+            queryString = '/admin/users/oldest';
+        }
+
+        $.get(encodeURI(queryString))
+            .done(function (data) {
+                appendResults(data);
+            })
+            .fail(function () {
+                alert("error connecting to server");
+            });
+
+    }
+
+    function getUserCount() {
+        $.get('/admin/users/count')
+            .done(function (data) {
+                alert('Current user count is: ' + data);
+            })
+            .fail(function () {
+                alert("error connecting to server");
+            });
+    }
+
+    $(function () {
+        appendHeaderRow();
+        $.ajaxSetup({timeout: 20000});
+        getUsers('search');
+    });
+
+
+</script>
+</body>
+</html>

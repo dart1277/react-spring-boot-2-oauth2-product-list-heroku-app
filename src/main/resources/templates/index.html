@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <title>Users csv app</title>
+    <th:block th:include="fragments/main_fragment.html :: headerincludes">
+    </th:block>
+</head>
+
+<body>
+<th:block th:include="fragments/main_fragment.html :: navbar(active_page='')"></th:block>
+
+<div class="container">
+    <h3>Sample csv data</h3><br/><br/>
+    <div style="padding-bottom: 3em">
+        <b>Please save the data below to a file with .csv extension<br/>
+            and upload this file on a page that can be found in the navigation bar above</b>
+    </div>
+    <pre>
+    first_name;last_name;birth_date;phone_no
+Stefan;Testowy;1988.11.11;600700800
+Maria;Ziółko;1999.1.1;555666777;
+Stefan;Testowy;1988.11.11;600700801
+Maria;Ziółko;1999.1.1;555666778;
+;;;
+Jolanta;Magia;2000.02.04;666000111
+
+ marian;kowalewski;1950.10.01;670540120
+Zygmunt;	Stefanowicz;1991.06.01;-
+Ernest;Gąbka;1991.06.01;
+Elżbieta;Żółw;1988.03.03;670540120
+Jolanta;Magia;2000.02.04;666000112
+
+ marian;kowalewski;1950.10.01;670540121
+ marian;kowalewski;1950.10.01;670540124
+Andrzej;Testowy;1988.10.11;600700807
+
+</pre>
+</div>
+<div th:replace="fragments/main_fragment.html :: footer"></div>
+</body>
+</html>
