@@ -1,0 +1,17 @@
+.linkActive {
+  color: lightsalmon !important;
+  text-decoration: none;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.navLink:active {
+  color: #3F51B5;
+}
+
+.navLink:visited {
+  color: #3F51B5;
+}
+

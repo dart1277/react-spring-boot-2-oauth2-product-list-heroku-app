@@ -1,13 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import Main from './components/main/Main'
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import Main from "./components/main/Main";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <Main/>
+      <Router>
+        <Main />
+      </Router>
     </div>
   );
 }
