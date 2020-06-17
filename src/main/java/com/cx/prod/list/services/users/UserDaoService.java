@@ -25,6 +25,10 @@ public class UserDaoService {
         return userRepository.findAll(pageable).toList();
     }
 
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     public List<User> getUsersByLastNameSortedByBirthDate(String name, Pageable pageable) {
         return userRepository.findByLastNameOrderByBirthDate("%" + name + "%", pageable);
     }
