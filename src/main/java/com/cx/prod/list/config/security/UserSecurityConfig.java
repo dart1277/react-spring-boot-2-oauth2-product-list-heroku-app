@@ -39,7 +39,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/image/**/*.jpg",
                 "/auth/**",
                 "/oauth2/**",
-                "/admin/**")
+                "/products/list")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
