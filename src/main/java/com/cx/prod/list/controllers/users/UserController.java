@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping(path = "/admin/users")
 public class UserController {
 
-    private static final Sort USER_PAGE_SORT_ORDER = Sort.by(User.BIRTHDAY_COLUMN_NAME).and(Sort.by(User.ID_COLUMN_NAME));
+    private static final Sort USER_PAGE_SORT_ORDER = Sort.by(User.BIRTHDAY_SORT_KEY).and(Sort.by(User.ID_COLUMN_NAME.toLowerCase()));
 
     @Autowired
     private UserDaoService userDaoService;

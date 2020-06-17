@@ -5,6 +5,7 @@ import com.cx.prod.list.utils.csv.users.CsvUsersParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserCsvService {
 
     private Logger logger = LoggerFactory.getLogger(UserCsvService.class);
