@@ -33,12 +33,13 @@ const Products = (props) => {
   const classes = useStyles();
   const prodData = [
     {
+      id: 10,
       prodName: "bike",
       weight: "10",
       netPrice: "200",
       grossPrice: "426",
     },
-    {
+    { id: 11,
       prodName: "pc",
       weight: "6",
       netPrice: "100",

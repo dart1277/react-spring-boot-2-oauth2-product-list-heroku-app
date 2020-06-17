@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useState } from "react";
-import { NavLink, Switch, Route } from "react-router-dom";
+import React, { useMemo, useState } from "react";
+import { NavLink, Switch, Route, withRouter } from "react-router-dom";
 import cls from "./main.module.css";
 import clsx from "clsx";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -15,12 +15,17 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
-import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import LockIcon from '@material-ui/icons/Lock';
-import HowToRegIcon from '@material-ui/icons/HowToReg';
-import Users from '../users/list/Users'
-import Products from '../products/list/Products'
+import AccessibilityNewIcon from "@material-ui/icons/AccessibilityNew";
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import LockIcon from "@material-ui/icons/Lock";
+import HowToRegIcon from "@material-ui/icons/HowToReg";
+import Users from "../users/list/Users";
+import Products from "../products/list/Products";
+import Login from "../login/Login";
+import Logout from "../logout/Logout";
+import LoginAuth from "../login/auth/LoginAuth";
+import { useSelector } from "react-redux";
+import { isAuthenticated } from "../../app/reducers/auth/authSlice";
 
 const drawerWidth = 240;
 
@@ -98,28 +103,23 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Main = (props) => {
-  const [state, nextState] = useState({auth: true});
+  const authenticated = useSelector(isAuthenticated);
   const classes = useStyles();
+
   const menuLinks = useMemo(
     () => [
       {
-        dest: "/",
+        dest: "/login",
         text: "Login",
         icon: <AccessibilityNewIcon className={classes.icon} />,
         exact: true,
         render: (auth) => !auth,
-        click: () => {
-          nextState(currentState => ({auth:!currentState.auth}));
-        },
       },
       {
-        dest: "/",
+        dest: "/logout",
         text: "Logout",
         icon: <LockIcon className={classes.icon} />,
         exact: true,
-        click: () => {
-          nextState(currentState => ({auth:!currentState.auth}));
-        },
         render: (auth) => auth,
       },
       {
@@ -136,7 +136,7 @@ const Main = (props) => {
         render: (auth) => auth,
       },
     ],
-    [classes]
+    [classes, props.history]
   );
 
   const [open, setOpen] = React.useState(false);
@@ -196,14 +196,13 @@ const Main = (props) => {
         <Divider />
         <List>
           {menuLinks.map((link, index) =>
-            (link.render != null ? link.render(state.auth) : true) ? (
+            (link.render != null ? link.render(authenticated) : true) ? (
               <NavLink
                 to={link.dest}
                 activeClassName={[cls.linkActive, cls.navLink].join(" ")}
                 className={cls.navLink}
                 exact={link.exact}
                 key={link.text}
-                onClick={link.click}
               >
                 <ListItem button>
                   {link.icon}
@@ -231,12 +230,15 @@ const Main = (props) => {
               </div>
             )}
           />
-          <Route path="/users/list" render={Users}/>
-          <Route path="/products/list" render={Products}/>
+          {authenticated && <Route path="/users/list" render={Users} />}
+          <Route path="/products/list" render={Products} />
+          <Route path="/login" exact render={Login} />
+          <Route path="/login/auth" exact render={LoginAuth} />
+          <Route path="/logout" exact render={Logout} />
         </Switch>
       </main>
     </div>
   );
 };
 
-export default Main;
+export default withRouter(Main);
