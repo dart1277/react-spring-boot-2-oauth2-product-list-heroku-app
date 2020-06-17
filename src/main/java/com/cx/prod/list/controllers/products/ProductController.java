@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/admin/products")
+@RequestMapping(value = "/products")
 public class ProductController {
 
     @Autowired
