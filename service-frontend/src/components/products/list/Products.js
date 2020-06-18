@@ -10,9 +10,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import IconButton from "@material-ui/core/IconButton";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { isAuthenticated } from "../../../app/reducers/auth/authSlice";
+import { deleteById, getForData } from "../../../app/rest/restUtil";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,63 +32,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const serverURL = "http://localhost:8080";
-
-const getReqConfig = () => {
-  const token = localStorage.getItem("token");
-  let reqConfig = {};
-  if (token != null) {
-    reqConfig = { headers: { Authorization: "Bearer " + token } };
-  }
-  return reqConfig;
-};
-
-const deleteById = (id, uri, thenFunc, updateDataState) => {
-  axios
-    .delete(serverURL + uri + id, getReqConfig())
-    .then(() => {
-      thenFunc();
-    })
-    .catch((err) => {
-      updateDataState({ prodData: [] });
-      console.log(err);
-    });
-};
-
-const getForData = (uri, updateDataState) => {
-  axios
-    .get(serverURL + uri, getReqConfig())
-    .then((data) => {
-      updateDataState({ prodData: data.data });
-      console.log(data);
-    })
-    .catch((err) => {
-      updateDataState({ prodData: [] });
-      console.log(err);
-    });
-};
-
 const Products = (props) => {
   const classes = useStyles();
   const authenticated = useSelector(isAuthenticated);
-  const prodData2 = [
-    {
-      id: 10,
-      prodName: "bike",
-      weight: "10",
-      netPrice: "200",
-      grossPrice: "426",
-    },
-    { id: 11, prodName: "pc", weight: "6", netPrice: "100", grossPrice: "123" },
-  ];
-
-  const [dataState, updateDataState] = useState({ prodData: [] });
+  const [dataState, updateDataState] = useState({ screenData: [] });
 
   useEffect(() => {
     getForData("/products/list", updateDataState);
   }, []);
 
-  const users = dataState.prodData.map((item, index) => (
+  const users = dataState.screenData.map((item, index) => (
     <Paper className={classes.paper} key={item.id}>
       <h2 style={{ display: "inline" }}>Product {index + 1}</h2>
       {authenticated && (

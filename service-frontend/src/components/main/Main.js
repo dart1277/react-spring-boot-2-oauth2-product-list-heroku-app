@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
-import { NavLink, Switch, Route, withRouter } from "react-router-dom";
+import React, { useState, useCallback } from "react";
+import { NavLink, withRouter } from "react-router-dom";
 import cls from "./main.module.css";
 import clsx from "clsx";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,131 +14,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import CloseIcon from "@material-ui/icons/Close";
-import AccessibilityNewIcon from "@material-ui/icons/AccessibilityNew";
-import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import LockIcon from "@material-ui/icons/Lock";
-import HowToRegIcon from "@material-ui/icons/HowToReg";
-import Users from "../users/list/Users";
-import Products from "../products/list/Products";
-import Login from "../login/Login";
-import Logout from "../logout/Logout";
-import LoginAuth from "../login/auth/LoginAuth";
 import { useSelector } from "react-redux";
 import { isAuthenticated } from "../../app/reducers/auth/authSlice";
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: "flex",
-    },
-    appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    menuButton: {
-      marginRight: 36,
-    },
-    hide: {
-      display: "none",
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    drawerClose: {
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      overflowX: "hidden",
-      width: theme.spacing(7) + 1,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1,
-      },
-    },
-    toolbar: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "flex-start",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-    },
-    content: {
-      marginTop: theme.spacing(7),
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-    icon: {
-      fontSize: 40,
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.down("xs")]: {
-        fontSize: 30,
-        marginRight: theme.spacing(3),
-      },
-    },
-  })
-);
+import { useStyles } from "./styles/mainStyles";
+import MainRoutes from "./routing/MainRoutes";
+import linkDefs from "./linkDefs";
 
 const Main = (props) => {
   const authenticated = useSelector(isAuthenticated);
   const classes = useStyles();
 
-  const menuLinks = useMemo(
-    () => [
-      {
-        dest: "/login",
-        text: "Login",
-        icon: <AccessibilityNewIcon className={classes.icon} />,
-        exact: true,
-        render: (auth) => !auth,
-      },
-      {
-        dest: "/logout",
-        text: "Logout",
-        icon: <LockIcon className={classes.icon} />,
-        exact: true,
-        render: (auth) => auth,
-      },
-      {
-        dest: "/products/list",
-        text: "Products",
-        icon: <FolderOpenIcon className={classes.icon} />,
-        exact: false,
-      },
-      {
-        dest: "/users/list",
-        text: "Users",
-        icon: <HowToRegIcon className={classes.icon} />,
-        exact: false,
-        render: (auth) => auth,
-      },
-    ],
-    [classes, props.history]
-  );
+  const menuLinks = useCallback(linkDefs(classes), [classes]);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -217,25 +104,7 @@ const Main = (props) => {
         <Divider />
       </Drawer>
       <main className={classes.content}>
-        <Switch>
-          <Route
-            path="/"
-            exact
-            render={() => (
-              <div>
-                <Typography paragraph>Lorem ipsum dolor sit amet.</Typography>
-                <Typography paragraph>
-                  Consequat mauris nunc congue nisi vitae suscipit.
-                </Typography>
-              </div>
-            )}
-          />
-          {authenticated && <Route path="/users/list" render={Users} />}
-          <Route path="/products/list" render={Products} />
-          <Route path="/login" exact render={Login} />
-          <Route path="/login/auth" exact render={LoginAuth} />
-          <Route path="/logout" exact render={Logout} />
-        </Switch>
+        <MainRoutes authenticated={authenticated} />
       </main>
     </div>
   );

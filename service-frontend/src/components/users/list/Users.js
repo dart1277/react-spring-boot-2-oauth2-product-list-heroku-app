@@ -1,7 +1,8 @@
+import React, { useState, useEffect } from "react";
 import cls from "./users.module.css";
-import React from "react";
 import { withRouter } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { deleteById, getForData } from "../../../app/rest/restUtil";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
@@ -29,40 +30,34 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const onDeleteUsr = (event, idx) => {
-  console.log(event.target + " " + idx);
-};
 
 const Users = (props) => {
   const classes = useStyles();
-  const usrData = [
-    {
-      id: 123120,
-      firstName: "fn",
-      lastName: "ln",
-      birthDate: "1998",
-      phoneNo: "555123456",
-    },
-    {
-      id: 123121,
-      firstName: "fn1",
-      lastName: "ln1",
-      birthDate: "1999",
-      phoneNo: "555123457",
-    },
-  ];
-  const users = usrData.map((item, index) => (
+  const [dataState, updateDataState] = useState({ screenData: [] });
+
+  useEffect(() => {
+    getForData("/users/all", updateDataState);
+  }, []);
+  
+  const users = dataState.screenData.map((item, index) => (
     <Paper className={classes.paper} key={item.id}>
       <h2 style={{ display: "inline" }}>User {index + 1}</h2>
       <IconButton
-        color="secondary"
-        aria-label="delete"
-        component="div"
-        className={classes.delBtn}
-        onClick={(event) => onDeleteUsr(event, item.id)}
-      >
-        <DeleteForeverIcon />
-      </IconButton>
+          color="secondary"
+          aria-label="delete"
+          component="div"
+          className={classes.delBtn}
+          onClick={() =>
+            deleteById(
+              item.id,
+              "/users/delete/",
+              () => getForData("/users/all", updateDataState),
+              updateDataState
+            )
+          }
+        >
+          <DeleteForeverIcon />
+        </IconButton>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <List>
@@ -82,7 +77,7 @@ const Users = (props) => {
             </ListItem>
             <Divider />
             <ListItem button divider>
-              <ListItemText primary="Phone" secondary={item.phoneNo} />
+              <ListItemText primary="Phone" secondary={item.phoneNumber} />
             </ListItem>
           </List>
         </Grid>
