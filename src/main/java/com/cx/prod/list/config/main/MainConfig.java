@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,6 +17,8 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @EnableTransactionManagement
 public class MainConfig implements WebMvcConfigurer {
+
+    private static final int MAX_AGE = 3600;
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
@@ -43,4 +46,13 @@ public class MainConfig implements WebMvcConfigurer {
         return dataSource;
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedMethods("POST", "OPTIONS", "GET", "DELETE", "PUT")
+                .allowedHeaders("*")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .maxAge(MAX_AGE);
+    }
 }

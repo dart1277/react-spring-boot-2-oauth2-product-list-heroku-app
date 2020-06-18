@@ -1,5 +1,7 @@
 package com.cx.prod.list.model.users;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "CUSTOMERS", uniqueConstraints = {@UniqueConstraint(columnNames = "PHONE_NO")})
 public class User {
@@ -38,6 +41,7 @@ public class User {
     @Column(nullable = false, name = "BIRTH_DATE")
     @PastOrPresent
     @NotNull
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birthDate;
 
     @Column(name = "PHONE_NO", nullable = true, length = PHONE_NO_FIELD_LENGTH)
