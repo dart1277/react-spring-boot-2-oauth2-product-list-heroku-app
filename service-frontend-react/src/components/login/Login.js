@@ -33,6 +33,22 @@ const useStyles = makeStyles((theme: Theme) =>
         marginRight: theme.spacing(3),
       },
     },
+    loginGoogleBar: {
+      backgroundColor: "#4F8AFF",
+      width: 250,
+      borderRadius: 2,
+      borderWidth: 1,
+      color: "white",
+      padding: 3,
+      textAlign: "center",
+      marginLeft: -theme.spacing(1),
+      [theme.breakpoints.down("xs")]: {
+        height: "2em",
+        marginLeft: -theme.spacing(3.5),
+        fontSize: 11,
+        width: 150,
+      },
+    },
   })
 );
 
@@ -53,19 +69,7 @@ const Login = (props) => {
             alt="Login with google"
           />
         </Icon>
-        <div
-          style={{
-            backgroundColor: "#4F8AFF",
-            width: 250,
-            height: "95%",
-            borderRadius: 2,
-            borderWidth: 1,
-            color: "white",
-            padding: 3,
-            textAlign: "center",
-            marginLeft: -5,
-          }}
-        >
+        <div className={classes.loginGoogleBar}>
           Login with google
         </div>
       </IconButton>
