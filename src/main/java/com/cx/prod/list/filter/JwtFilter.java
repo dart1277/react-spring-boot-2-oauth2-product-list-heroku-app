@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (jwt != null && jwtUtil.isTokenValid(jwt)) {
                 String accountName = jwtUtil.getAccountName(jwt);
-                AppUser appUser = new AppUser("cx", accountName, "a@a", new HashMap<>());
+                AppUser appUser = getUserFromDataStore(accountName);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(appUser, null, appUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -40,6 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private AppUser getUserFromDataStore(String accountName) {
+        return new AppUser("user", accountName, "user@user", new HashMap<>());
     }
 
 }

@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping("/oldest")
-    public ResponseEntity<List<User>> getOldestUserWithPhoneNumber() {
-        return ResponseEntity.ok(userDaoService.getOldestUserWithPhoneNumber());
+    public ResponseEntity<List<User>> getOldestUserWithPhoneNumber(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer pageSize) {
+        return ResponseEntity.ok(userDaoService.getOldestUserWithPhoneNumber(PageRequest.of(page, pageSize)));
     }
 
     @GetMapping("/count")

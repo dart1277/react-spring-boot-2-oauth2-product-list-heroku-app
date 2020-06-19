@@ -41,8 +41,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/oauth2/**",
                 "/products/list")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                .anyRequest().hasRole("USER")
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()

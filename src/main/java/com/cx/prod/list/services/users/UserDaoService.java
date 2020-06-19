@@ -33,8 +33,8 @@ public class UserDaoService {
         return userRepository.findByLastNameOrderByBirthDate("%" + name + "%", pageable);
     }
 
-    public List<User> getOldestUserWithPhoneNumber() {
-        return userRepository.findOldestUserWithPhoneNumber();
+    public List<User> getOldestUserWithPhoneNumber(Pageable pageable) {
+        return userRepository.findOldestUserWithPhoneNumber(pageable);
     }
 
 

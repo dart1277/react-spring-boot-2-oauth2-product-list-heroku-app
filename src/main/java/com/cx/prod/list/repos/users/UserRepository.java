@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByLastNameOrderByBirthDate(@Param("lastName") String name, Pageable pageable);
 
     @Query("from User where phoneNumber is not null and birthDate <= all(select birthDate from User)")
-    List<User> findOldestUserWithPhoneNumber();
+    List<User> findOldestUserWithPhoneNumber(Pageable pageable);
 
     @Query("select count(u) from User u")
     Integer getTotalUserCount();
