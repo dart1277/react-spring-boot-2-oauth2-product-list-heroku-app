@@ -8,13 +8,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController implements ErrorController {
 
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String index() {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String react() {
         return "index";
     }
 
+    @RequestMapping(value = "/login/auth", method = RequestMethod.GET)
+    public String auth() {
+        return "index";
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String index() {
+        return "/admin/index";
+    }
+
     @RequestMapping(value = "/admin/login")
-    public String adminLogin(){
+    public String adminLogin() {
         return "/admin/login";
     }
 
@@ -27,5 +37,4 @@ public class MainController implements ErrorController {
     public String getErrorPath() {
         return "/error";
     }
-
 }

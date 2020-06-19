@@ -33,6 +33,16 @@ public class MainConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/image/**").addResourceLocations("classpath:/static/image/");
+        registry.addResourceHandler("/media/**").addResourceLocations("classpath:/static/media/");
+        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/static/js/");
+        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/static/css/");
+        registry.addResourceHandler("/static/image/**").addResourceLocations("classpath:/static/static/image/");
+        registry.addResourceHandler("/static/media/**").addResourceLocations("classpath:/static/static/media/");
+        registry.addResourceHandler("/**/*.jpg").addResourceLocations("classpath:/static/static/media/");
+        registry.addResourceHandler("/**/*.jpeg").addResourceLocations("classpath:/static/static/media/");
+        registry.addResourceHandler("/**/*.png").addResourceLocations("classpath:/static/static/media/");
+        registry.addResourceHandler("/**/*.gif").addResourceLocations("classpath:/static/static/media/");
+        registry.addResourceHandler("/**/*.txt").addResourceLocations("classpath:/static/static/txt/");
     }
 
     @Bean

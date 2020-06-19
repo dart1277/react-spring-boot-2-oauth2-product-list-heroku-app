@@ -32,13 +32,24 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/",
                 "/error",
+                "/*.txt",
+                "/*.jpeg",
+                "/*.jpg",
+                "/*.png",
+                "/*.gif",
                 "/js/**/*.js",
                 "/css/**/*.css",
                 "/image/**/*.png",
                 "/image/**/*.gif",
                 "/image/**/*.jpg",
-                "/auth/**",
+                "/static/js/**/*.js",
+                "/static/css/**/*.css",
+                "/static/media/**/*.png",
+                "/static/media/**/*.gif",
+                "/static/media/**/*.jpg",
+                "/static/media/**/*.svg",
                 "/oauth2/**",
+                "/login/auth",
                 "/products/list")
                 .permitAll()
                 .anyRequest().hasRole("USER")
