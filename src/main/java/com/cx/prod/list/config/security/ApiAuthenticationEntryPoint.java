@@ -20,7 +20,7 @@ public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
             throws IOException {
         if (httpServletRequest.getServletPath().startsWith("/admin") || httpServletRequest.getServletPath().startsWith("/csv")) {
             RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-            redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "/admin");
+            redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, "/admin/index");
         } else {
             logger.error("Unauthorized ", ex);
             httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getLocalizedMessage());
