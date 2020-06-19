@@ -20,7 +20,7 @@ public class MainController implements ErrorController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String index() {
-        return "/admin/index";
+        return "redirect:/admin/login";
     }
 
     @RequestMapping(value = "/admin/login")
