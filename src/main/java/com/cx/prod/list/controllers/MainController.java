@@ -20,12 +20,12 @@ public class MainController implements ErrorController {
 
     @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
     public String adminLogin() {
-        return "/admin/login";
+        return "admin/login";
     }
 
     @RequestMapping(value = "/admin/index", method = RequestMethod.GET)
     public String adminMain() {
-        return "/admin/index";
+        return "admin/index";
     }
 
     @RequestMapping(value = "error")
