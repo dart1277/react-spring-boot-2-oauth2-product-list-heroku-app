@@ -23,7 +23,7 @@ const MainRoutes = (props) => {
                 Hibernate and H2 database
               </Typography>
               <Button
-                href="/admin"
+                href="/admin/login"
                 variant="contained"
                 color="primary"
                 type="submit">
