@@ -25,7 +25,6 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/all")
-    @ResponseBody
     public ResponseEntity<List<User>> getAllUsers(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer pageSize) {
         return ResponseEntity.ok(userDaoService.getAllUsers(PageRequest.of(page, pageSize, USER_PAGE_SORT_ORDER)));
     }
