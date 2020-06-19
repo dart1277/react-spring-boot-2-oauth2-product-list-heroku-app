@@ -18,10 +18,6 @@ public class MainController implements ErrorController {
         return "index";
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String admin() {
-        return "redirect:admin/login";
-    }
 
     @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
     public String adminLogin() {
