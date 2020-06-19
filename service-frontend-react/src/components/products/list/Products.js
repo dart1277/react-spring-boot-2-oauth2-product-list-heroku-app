@@ -1,6 +1,6 @@
 import cls from "./products.module.css";
 import React, { useEffect, useState } from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, NavLink, Route, Switch } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
@@ -10,14 +10,17 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import IconButton from "@material-ui/core/IconButton";
+import Button from "@material-ui/core/Button";
 import { useSelector } from "react-redux";
 import { isAuthenticated } from "../../../app/reducers/auth/authSlice";
 import { deleteById, getForData } from "../../../app/rest/restUtil";
+import ProductForm from "../form/ProductForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      marginTop: 25,
     },
     paper: {
       padding: theme.spacing(2),
@@ -89,7 +92,37 @@ const Products = (props) => {
     </Paper>
   ));
 
-  return <div className={classes.root}>{users}</div>;
+  return (
+    <React.Fragment>
+      <Switch>
+        <Route
+          exact
+          path={"/products/list"}
+          render={() => (
+            <React.Fragment>
+              {authenticated && (
+                <NavLink to={"/products/list/add"}>
+                  <Button variant="contained" color="primary">
+                    Add Product
+                  </Button>
+                </NavLink>
+              )}
+              <div className={classes.root}>{users}</div>
+            </React.Fragment>
+          )}
+        />
+        <Route
+          path={"/products/list/add"}
+          render={() => (
+            <ProductForm
+              oldState={dataState}
+              updateProductsState={updateDataState}
+            />
+          )}
+        />
+      </Switch>
+    </React.Fragment>
+  );
 };
 
 export default withRouter(Products);

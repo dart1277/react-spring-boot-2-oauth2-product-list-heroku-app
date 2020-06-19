@@ -1,9 +1,12 @@
 import axios from "axios";
+import {
+  SERVER_DOMAIN_AND_PORT,
+  CLIENT_DOMAIN_AND_PORT,
+  PROTOCOL
+} from "../../config/config";
 
-const SERVER_DOMAIN_PORT = "localhost:8080";
-const CLIENT_DOMAIN_PORT = "localhost:3000";
-const PROTOCOL = "http";
-const serverURL = PROTOCOL + "://" + SERVER_DOMAIN_PORT;
+
+const serverURL = PROTOCOL + "://" + SERVER_DOMAIN_AND_PORT;
 export const GOOGLE_PROVIDER = "google";
 
 export const getAuthUrl = (provider) =>
@@ -13,7 +16,7 @@ export const getAuthUrl = (provider) =>
   "?redirect_uri=" +
   PROTOCOL +
   "://" +
-  CLIENT_DOMAIN_PORT +
+  CLIENT_DOMAIN_AND_PORT +
   "/login/auth";
 
 export const getReqConfig = (method) => {
@@ -51,6 +54,30 @@ export const getForData = (uri, updateDataState) => {
     })
     .catch((err) => {
       updateDataState({ screenData: [] });
+      console.log(err);
+    });
+};
+
+export const postData = (
+  uri,
+  newData,
+  oldStateData,
+  updateDataState,
+  redirectCallback
+) => {
+  axios
+    .post(serverURL + uri, newData, getReqConfig())
+    .then((data) => {
+      updateDataState({
+        screenData: oldStateData.screenData.concat(data.data),
+      });
+      console.log(data);
+      if (redirectCallback != null) {
+        redirectCallback();
+      }
+    })
+    .catch((err) => {
+      updateDataState({ screenData: [].concat(oldStateData.screenData) });
       console.log(err);
     });
 };
