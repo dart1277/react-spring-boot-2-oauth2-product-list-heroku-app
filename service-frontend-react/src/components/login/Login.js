@@ -4,22 +4,7 @@ import LoginImg from "./img/btn_google_dark_normal_ios.svg";
 import Icon from "@material-ui/core/Icon";
 import { withRouter } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-const SERVER_DOMAIN_PORT = "localhost:8080";
-const CLIENT_DOMAIN_PORT = "localhost:3000";
-const PROTOCOL = "http";
-const GOOGLE_PROVIDER = "google";
-
-const getAuthUrl = (provider) => 
-  PROTOCOL +
-  "://" +
-  SERVER_DOMAIN_PORT +
-  "/oauth2/authorize/" +
-  provider +
-  "?redirect_uri=" +
-  PROTOCOL +
-  "://" +
-  CLIENT_DOMAIN_PORT +
-  "/login/auth";
+import { GOOGLE_PROVIDER, getAuthUrl } from "../../app/rest/restUtil";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
