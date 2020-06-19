@@ -5,6 +5,7 @@ import Login from "../../login/Login";
 import Logout from "../../logout/Logout";
 import LoginAuth from "../../login/auth/LoginAuth";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 import { Switch, Route } from "react-router-dom";
 
 const MainRoutes = (props) => {
@@ -16,10 +17,18 @@ const MainRoutes = (props) => {
           exact
           render={() => (
             <div>
-              <Typography paragraph>Lorem ipsum dolor sit amet.</Typography>
-              <Typography paragraph>
-                Consequat mauris nunc congue nisi vitae suscipit.
+              <Typography paragraph style={{ fontWeight: "bold" }}>
+                Welcome to a sample React 'n Spring Boot 2 web page using: side
+                by side OAuth2 and Form Login, Thymeleaf, JQuery, Bootstrap,
+                Hibernate and H2 database
               </Typography>
+              <Button
+                href="/admin"
+                variant="contained"
+                color="primary"
+                type="submit">
+                Admin panel
+              </Button>
             </div>
           )}
         />
