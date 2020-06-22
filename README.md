@@ -15,7 +15,8 @@ Admin console provides features such as: client personal data CSV file upload (w
 
 #### Link to React application is available below
 
-(it can take up to 50s to start up, the app is hosted on a free heroku account)
+(**it can take up to 50s to start up**, the app is hosted on a free heroku account)
+
 https://spring-boot-oauth2-products.herokuapp.com
 
 **Every time a heroku dyno spins up, state in the DB will be recreated.**
