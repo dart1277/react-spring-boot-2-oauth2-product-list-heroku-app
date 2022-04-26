@@ -27,12 +27,21 @@ public class Oauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = jwtUtil.generate(authentication, request);
 
-        String targetUrl = UriComponentsBuilder.fromUriString(authorizationRequestRepository.getAuthorizationRequestRedirectUri(request))
+/*        String targetUrl = UriComponentsBuilder.fromUriString(authorizationRequestRepository.getAuthorizationRequestRedirectUri(request))
                 .queryParam("token", token)
                 .build().toUriString();
         authorizationRequestRepository.removeAuthorizationRequestRedirectUri(request);
         request.getSession().invalidate();
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);*/
+
+        UriComponentsBuilder targetUrl = UriComponentsBuilder.fromUriString("/login/auth");
+        response.setHeader("Set-Cookie", "token=" +token+ "; HttpOnly=true; Secure=true; Path=/; SameSite=strict; Domain=localhost"); // SameSite=lax
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+
+        authorizationRequestRepository.removeAuthorizationRequestRedirectUri(request);
+        request.getSession().invalidate();
+        response.setStatus(200);
     }
 
 }

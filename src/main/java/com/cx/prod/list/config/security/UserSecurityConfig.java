@@ -4,6 +4,7 @@ import com.cx.prod.list.filter.JwtFilter;
 import com.cx.prod.list.repos.security.AuthorizationRequestRepositoryRedirectDecorator;
 import com.cx.prod.list.security.handlers.Oauth2FailHandler;
 import com.cx.prod.list.security.handlers.Oauth2SuccessHandler;
+import com.cx.prod.list.security.web.SecureCookieCsrfTokenRepository;
 import com.cx.prod.list.services.oauth.Oauth2UsrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI;
 
 @Configuration
 /*@EnableWebSecurity
@@ -27,6 +32,9 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
     private Oauth2SuccessHandler oauth2SuccessHandler;
     @Autowired
     private Oauth2FailHandler oauth2FailHandler;
+
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -56,11 +64,12 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
+                .baseUri("/oauth2/authorize") // "/oauth2/authorization"
                 .authorizationRequestRepository(authorizationRequestRepository())
+                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, DEFAULT_AUTHORIZATION_REQUEST_BASE_URI))
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
+                .baseUri("/oauth2/callback/*") // "api/login2/*"
                 .and()
                 .userInfoEndpoint()
                 .userService(oauth2UsrService())
@@ -79,8 +88,10 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new ApiAuthenticationEntryPoint())
                 .and()
                 .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .disable()
                 .cors();
+                //.configurationSource();
 
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
     }

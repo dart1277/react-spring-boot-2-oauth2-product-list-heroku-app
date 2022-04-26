@@ -1,15 +1,16 @@
 package com.cx.prod.list.config.main;
 
+import org.springframework.boot.web.embedded.jetty.ConfigurableJettyWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,16 @@ import javax.sql.DataSource;
 public class MainConfig implements WebMvcConfigurer {
 
     private static final int MAX_AGE = 3600;
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/notFound").setViewName("forward:/index.html");
+    }
+
+    @Bean
+    public WebServerFactoryCustomizer<ConfigurableJettyWebServerFactory> containerCustomizer() {
+        return container -> container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/notFound"));
+    }
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
@@ -43,6 +54,16 @@ public class MainConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/**/*.png").addResourceLocations("classpath:/static/static/media/");
         registry.addResourceHandler("/**/*.gif").addResourceLocations("classpath:/static/static/media/");
         registry.addResourceHandler("/**/*.txt").addResourceLocations("classpath:/static/static/txt/");
+
+        // Angular
+/*        registry.addResourceHandler("/*.html").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.js").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.css").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.ico").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.woff").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.woff2").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/*.js.map").addResourceLocations("classpath:/static/webapp/");
+        registry.addResourceHandler("/assets/**").addResourceLocations("classpath:/static/webapp/assets/");*/
     }
 
     @Bean
