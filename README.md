@@ -12,16 +12,3 @@ Branch *backend-ssl-support* also contains simple SSL configuration with a self 
 User is able to add (with React Hook Form validation), list and delete products, list and delete clients' personal data after logging in using Google authentication.
 
 Admin console provides features such as: client personal data CSV file upload (with additional simple data enhancement), client list, data pagination, a few analytical queries to demonstrate Hibernate capabilities.
-
-#### Link to React application is available below
-
-(**it can take up to 50s to start up**, the app is hosted on a free heroku account)
-
-https://spring-boot-oauth2-products.herokuapp.com
-
-**Every time a heroku dyno spins up, state in the DB will be recreated.**
-
-#### Link to the admin console
-https://spring-boot-oauth2-products.herokuapp.com/admin/index
-
-(user: admin / password: admin)
